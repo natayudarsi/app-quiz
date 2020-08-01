@@ -1,5 +1,4 @@
 import 'package:app_quiz/common/routes/routes.dart';
-import 'package:app_quiz/main.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget{

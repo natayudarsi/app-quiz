@@ -16,7 +16,7 @@ class MainScreen extends StatelessWidget {
             alignment: Alignment.center,
             child: Container(
              height: size.height * .4,
-             color: Colors.lightGreen,
+             color: Color(0xFF88da89),
             ),
           ),
           Container(
@@ -52,15 +52,39 @@ class MainScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 RaisedButton(
-                  color: Colors.indigo,
+                  color: Color(0xfff0c6b5),
                   onPressed: (){
                     Navigator.of(context).pushNamed(Routes.rpsScreen);
                   },
                   child: Text('Mulai', style: TextStyle(),),
                 ),
                 RaisedButton(
+                  color: Color(0xfff0c6b5),
                   onPressed: (){
-                    SystemNavigator.pop();
+                    showDialog( 
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0)),
+                          title: new Text("Yakin ingin keluar?"),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text("Ya"),
+                              onPressed: () { 
+                                SystemNavigator.pop();
+                              },
+                            ),
+                            FlatButton(
+                              onPressed: (){
+                                Navigator.of(context).pop();
+                              }, 
+                              child: Text('Tidak'))
+                          ],
+                        );
+                      },
+                    );
                   },
                   child: Text('Keluar'),
                    

@@ -1,10 +1,6 @@
 import 'package:app_quiz/common/routes/routes.dart';
 import 'package:app_quiz/common/routes/routing.dart';
-import 'package:app_quiz/presentation/quiz_screen/quiz_screen.dart';
-import 'package:app_quiz/presentation/rock.dart';
-import 'package:app_quiz/rps_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 

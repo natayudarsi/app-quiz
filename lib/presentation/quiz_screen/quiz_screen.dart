@@ -1,5 +1,7 @@
-import 'package:app_quiz/data/data-angket.dart';
+import 'dart:async';
+
 import 'package:app_quiz/model/angket_model.dart';
+import 'package:app_quiz/presentation/widget/loading_soal.dart';
 import 'package:flutter/material.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -15,6 +17,8 @@ class _QuizScreenState extends State<QuizScreen> {
   int a=0;
   int b=0;
   int c=0;
+
+  bool loading = false;
 
   @override
   void initState() {
@@ -32,6 +36,8 @@ class _QuizScreenState extends State<QuizScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0)),
           title: new Text("Hasil"),
           content: new Text("A = $a, B = $b, C = $c"),
           actions: <Widget>[
@@ -40,12 +46,32 @@ class _QuizScreenState extends State<QuizScreen> {
               onPressed: () { 
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
-                Navigator.of(context).pop();
               },
             ),
           ],
         );
       },
+    );
+  }
+
+  void _showDialogNotChose(){
+    showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0)
+          ),
+          content: Text('Pilih jawaban dahulu!'),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: (){
+                Navigator.of(context).pop();
+              }, 
+              child: Text('Ok'))
+          ],
+        );
+      }
     );
   }
 
@@ -67,18 +93,26 @@ class _QuizScreenState extends State<QuizScreen> {
                   gradient: LinearGradient(
                       begin: Alignment.topRight,
                       end: Alignment.bottomLeft,
-                      colors: [Color(0xff3383CD), Color(0xFF11249F)])),
+                      colors: [Color(0xff3383CD), Color(0xFF88da89)])
+              ),
               child: Column(
                 children: <Widget>[
                   Container(
                     margin: EdgeInsets.all(size.height * .04),
                     height : size.height * .1,
-                    child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Text('Soal No '+angkets[_indexSoalKe].nomor,style: TextStyle(fontSize:20, color: Colors.white),),
-                        Text('8-15',style: TextStyle(backgroundColor: Colors.amber, fontSize: 16),)
-                      ],
+                    child: 
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text: 'Soal no ${angkets[_indexSoalKe].nomor}\n',
+                        style: TextStyle(fontSize: 20),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text:'${angkets[_indexSoalKe].nomor} - 15',
+                            style: TextStyle(fontSize: 14)
+                          )
+                        ]
+                      )
                     )
                   ),
                    Text(angkets[_indexSoalKe].soal, textAlign: TextAlign.center,
@@ -122,45 +156,47 @@ class _QuizScreenState extends State<QuizScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            // GestureDetector(
-            //   onTap: (){
-            //     setState(() {                  
-            //       // finalAnswer[_indexSoalKe] = _answer;
-            //       finalAnswer.add("a");
-            //       print(finalAnswer);
-            //       _indexSoalKe = _indexSoalKe -1;
-            //       _answer = null;
-            //     });
-            //   },
-            //   child: Container(
-            //     color: Colors.blueAccent,
-            //     height: size.width * .1,
-            //     width: size.width * .3,
-            //     child: Center(child:Text('Previous',)),
-            // )
-            // ),
-            GestureDetector(
-              onTap: (){
-                print(_indexSoalKe);
-                _indexSoalKe == 14 ?
-                  _showDialog()
-                :
-                setState(() {
-                
-                    finalAnswer.add(_answer);
-                    print(finalAnswer);
-                    _answer == "a" ? a = a+1 : _answer == "b" ? b= b+1 : c= c+1;
-                    print("a = $a, b= $b, c= $c");
-                    _indexSoalKe = _indexSoalKe +1;
-                    _answer = null;
-                });
+            RaisedButton(
+              onPressed: ()async {
+                if(_answer != null){
+                  Timer timer = Timer(Duration(milliseconds: 700), (){
+                    Navigator.of(context, rootNavigator: true).pop();
+                  });
+                  await showDialog(
+                    barrierDismissible: true,
+                    context: context,
+                    builder: (_) => LoadingOverlay(
+                      asset: 'assets/images/loading_success_error_2.flr',
+                      animate: 'loading',
+                    ),
+                    
+                  ).then((value){
+                    timer?.cancel();
+                    timer = null;
+                  });
+
+                  print(_indexSoalKe);
+                  
+                  setState(() {
+                      // loading = true;
+                      finalAnswer.add(_answer);
+                      print(finalAnswer);
+                      _answer == "a" ? a = a+1 : _answer == "b" ? b= b+1 : c= c+1;
+                      print("a = $a, b= $b, c= $c");
+                      _indexSoalKe == 14 ?
+                        _showDialog()
+                      :
+                      _indexSoalKe = _indexSoalKe +1;
+                      _answer = null;
+                  });
+                }else{
+                  _showDialogNotChose();
+                }
               },
-              child: Container(
-                color: Colors.red,
-                height: size.width * .1,
-                width: size.width *.3,
-                child: Center(child:Text('Next',)),
-            ))
+              color: Color(0xfff0c6b5),
+              child: Text('Next'),
+            
+            ),
           ],
         ))
       ],
@@ -209,7 +245,7 @@ class AnswerWidget extends StatelessWidget {
     GestureDetector(
       onTap: press,
       child: Container(
-          height: size.height * .08,
+          height: size.height * .1,
           margin: EdgeInsets.symmetric(
             horizontal: size.width * .1
           ).copyWith(bottom : size.height * .02),
@@ -218,13 +254,13 @@ class AnswerWidget extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(size.width * .1),
-            color: isActive ? Colors.blueAccent : Colors.grey[400]
+            color: isActive ? Color(0xff88da89) : Colors.grey[400]
           ),
           child: Row(
             children: <Widget>[
               Text('$choice.', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),),
               SizedBox(width: size.width * .03,),
-              Container(width: size.width * .62,child:Text(answer, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),)),
+              Container(width: size.width * .62,child: Text(answer, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),)),
             ],
           ),
         ),
@@ -232,3 +268,4 @@ class AnswerWidget extends StatelessWidget {
   }
 
 }
+

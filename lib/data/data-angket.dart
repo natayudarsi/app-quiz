@@ -1,7 +1,5 @@
 import 'package:app_quiz/data/soal/jawaban_model.dart';
 import 'package:app_quiz/data/soal/soal_model.dart';
-import 'package:meta/meta.dart';
-import 'package:flutter/material.dart';
 
 Soal angket = Soal(
   nomor: '1', 

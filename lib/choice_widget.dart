@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 class PlayerChoiceWidget extends StatelessWidget {
   final String image;
   final String textPlayer;
-  bool _opacity = false;
 
   PlayerChoiceWidget({
     Key key,
     @required this.image,
-    @required this.textPlayer
+    @required this.textPlayer,
   }) : super(key:key);
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
+      height: size.height * .38,
       width: size.width * .45,
-      decoration: BoxDecoration(color: Colors.amber),
+      decoration: BoxDecoration(color: Color(0xFFf0c6b5)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[

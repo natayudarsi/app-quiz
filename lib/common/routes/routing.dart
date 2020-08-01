@@ -1,10 +1,8 @@
 import 'package:app_quiz/error_screen.dart';
-import 'package:app_quiz/home.dart';
+import 'package:app_quiz/presentation/games_screen/screen_game.dart';
 import 'package:app_quiz/presentation/main_screen.dart';
 import 'package:app_quiz/presentation/quiz_screen/quiz_screen.dart';
-import 'package:app_quiz/presentation/rock.dart';
 import 'package:app_quiz/presentation/widget/slide_transition_widget.dart';
-import 'package:app_quiz/rps_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
