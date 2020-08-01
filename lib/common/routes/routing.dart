@@ -1,6 +1,8 @@
 import 'package:app_quiz/error_screen.dart';
 import 'package:app_quiz/home.dart';
+import 'package:app_quiz/presentation/main_screen.dart';
 import 'package:app_quiz/presentation/quiz_screen/quiz_screen.dart';
+import 'package:app_quiz/presentation/rock.dart';
 import 'package:app_quiz/presentation/widget/slide_transition_widget.dart';
 import 'package:app_quiz/rps_screen.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +13,15 @@ import 'routes.dart';
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch(settings.name) {
-      case Routes.homeScreen:
+      case Routes.mainScreen:
         return MaterialPageRoute<dynamic>(builder: (_) => _buildHomeScreen());
+        
       case Routes.rpsScreen:
-        return MaterialPageRoute<dynamic>(builder: (_) => _buildRpsScreen());
+        return SlideRouteTransition(
+          page: _buildRpsScreen(),
+          animationTo: AnimationTo.left
+        ) ;
+        
       
       case Routes.soalScreen:
         return SlideRouteTransition(
@@ -28,7 +35,7 @@ class RouteGenerator {
   }
 
   static Widget _buildHomeScreen() {
-    return HomeScreen();
+    return MainScreen();
   }
 
   static Widget _buildErrorScreen() {
@@ -36,7 +43,7 @@ class RouteGenerator {
   }
 
   static Widget _buildRpsScreen() {
-    return RpsScreen();
+    return ScreenGame();
   }
 
   static Widget _buildSoalScreen() {

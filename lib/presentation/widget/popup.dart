@@ -1,5 +1,5 @@
 // import 'package:flutter/material.dart';
-// import 'package:px/common/config/screen_config.dart';
+// import 'package:app_quiz/common/config/screen_config.dart';
 // import 'package:px/presentation/themes/color_theme.dart';
 // import 'package:px/presentation/widgets/show_dialog_widget/dialog_custom_string.dart';
 

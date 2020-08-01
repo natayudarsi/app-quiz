@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:app_quiz/choice_widget.dart';
+import 'package:app_quiz/common/routes/routes.dart';
 import 'package:flutter/material.dart';
 
 class ScreenGame extends StatefulWidget {
@@ -14,6 +15,7 @@ class _ScreenState extends State<ScreenGame> {
   String image1;
   int image2 = 3;
   var a;
+  String pemenang;
 
   @override
   void initState() {
@@ -27,28 +29,40 @@ class _ScreenState extends State<ScreenGame> {
     print(computer);
     if(player == computer){
       print('seri');
+      pemenang='Seri!!!';
     } else if(player == 'rock.png' && computer == 'scissor.png' || player == 'scissor.png' && computer == 'paper.png' || player == 'paper.png' && computer == 'rock.png') {
       print('you win');
+      pemenang='Kamu Menang!!!';
     } else {
+      pemenang = 'Kamu Kalah!!!';
       print('you lose');
     }
   }
 
   void _showDialog() {
-    showDialog(
+    showDialog( 
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Alert Dialog title"),
-          content: new Text("Alert Dialog body"),
+          title: new Text(pemenang),
+          // content: new Text("Alert Dialog body"),
           actions: <Widget>[
             new FlatButton(
-              child: new Text("Close"),
-              onPressed: () {
+              child: Text(
+                pemenang == 'Kamu Menang!!!' ? 'Lanjut' : 'Main Lagi'
+              ),
+              onPressed: () { 
+                pemenang == 'Kamu Menang!!!' ?
+                {
+                Navigator.of(context).pop(),
+                Navigator.of(context).pushNamed(Routes.soalScreen)
+                }
+                :
                 Navigator.of(context).pop();
                 setState(() {
                   image1 = null;
-                image2 = 3;
+                  image2 = 3;
                 });
               },
             ),
@@ -94,30 +108,27 @@ class _ScreenState extends State<ScreenGame> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                InkWell(
+                  onTap: (){
+                    a=1;
+                    setState(() {
+                      image1 = 'assets/images/rock.png';
+                      image2 = random.nextInt(3);
+                      hasil(image1, images[image2]);
+                      _showDialog();
+                    });
+                    print(image2);
+                    print(images[1]);
+                  },
+                  child: Container(
                   margin: EdgeInsets.all(10),
                   height: 100,
                   width: 100,
                   child: Image.asset('assets/images/rock.png'),
                 ),
-                Container(
-                  margin: EdgeInsets.all(10),
-                  height: 100,
-                  width: 100,
-                  child: Image.asset('assets/images/paper.png'),
                 ),
-                // Container(
-                //   margin: EdgeInsets.all(10),
-                //   height: 100,
-                //   width: 100,
-                //   child: Image.asset('assets/images/scissor.png'),
-                // ),
                 
                 InkWell(
-                  // focusColor: Colors.amber,
-                  // highlightColor: Colors.amber,
-                  // splashColor: Colors.amber,
-                  // hoverColor: Colors.amber,
                   onTap: (){
                     a=1;
                     setState(() {
@@ -134,6 +145,30 @@ class _ScreenState extends State<ScreenGame> {
                   height: 100,
                   width: 100,
                   child: Image.asset('assets/images/paper.png'),
+                ),
+                ),
+                
+                InkWell(
+                  // focusColor: Colors.amber,
+                  // highlightColor: Colors.amber,
+                  // splashColor: Colors.amber,
+                  // hoverColor: Colors.amber,
+                  onTap: (){
+                    a=1;
+                    setState(() {
+                      image1 = 'assets/images/scissor.png';
+                      image2 = random.nextInt(3);
+                      hasil(image1, images[image2]);
+                      _showDialog();
+                    });
+                    print(image2);
+                    print(images[1]);
+                  },
+                  child: Container(
+                  margin: EdgeInsets.all(10),
+                  height: 100,
+                  width: 100,
+                  child: Image.asset('assets/images/scissor.png'),
                 ),
                 )
               ],
